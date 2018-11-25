@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Playing Videos</title>
+  </head>
+  <body>
+    <video id="myvideo" width="99%" height="99%" controls autoplay>
+      <source class="active" src="static/video.mp4" type="video/webm" />
+      {% for v in video %}
+        <source src="static/{{ v }}" type="video/mp4" />
+      {% endfor %}
+    </video>
+    {% if refresh %}
+      <script>
+        function reload(){
+          window.location.reload();
+        };
+      </script>
+      <body onLoad="reload()" >
+    {% endif %}
+    <script>
+      var myvid = document.getElementById('myvideo');
+
+      myvid.addEventListener('ended', handler, false);
+      function handler(e){
+        var activesource = document.querySelector("#myvideo source.active");
+        var nextsource = document.querySelector("#myvideo source.active + source") || document.querySelector("#myvideo source:first-child");
+
+        activesource.className = "";
+        nextsource.className = "active";
+
+        myvid.src = nextsource.src;
+        myvid.play();
+      };
+    </script>
+  </body>
+</html>
